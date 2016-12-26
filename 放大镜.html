@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>放大镜</title>
+</head>
+<style type="text/css">
+	*{
+		padding: 0;
+		margin: 0;
+	}
+	
+	.small{
+		width: 350px;
+		height: 350px;
+		border: 1px solid black;
+		overflow: hidden;
+		cursor: move;
+		
+	}
+	.small img{
+		width: 350px;
+		height: 350px;
+	}
+	img{
+		border: none;
+		border: 0;
+	}
+	a img{
+		border: none;
+		border:0;
+	}
+	.big{
+		width: 350px;
+		height: 350px;
+		border: 1px solid black;
+		position: absolute;
+		left: 354px;
+		top: 0;
+		display: none;
+		overflow: hidden;
+	}
+	.big img{
+		width: 800px;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.mask{
+		width: 150px;
+		height: 150px;
+		background: rgba(0,0,255,0.2);
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: none;
+	}
+</style>
+<body>
+	
+		<div class="small">
+			<img src="img/small.jpg"/>
+			<div class="mask"></div>
+		</div>
+		<div class="big">
+			<img src="img/big.jpg"/>
+		</div>
+	
+</body>
+<script type="text/javascript">
+	// window.onload = function(){}预加载
+//	window.onload = function(){
+		var small = document.querySelector('.small');
+		var mask = document.querySelector('.mask');
+		var big = document.querySelector('.big');
+		// 鼠标触摸小图标，蒙版和放大效果出现
+		small.onmouseover = function(){
+			mask.style.display = 'block';
+			big.style.display = 'block';
+		}
+		// 鼠标移开，蒙版，放大效果消失
+		small.onmouseout = function(){
+			mask.style.display = 'none';
+			big.style.display = 'none';
+		}
+		// 小图标移动事件
+		small.onmousemove  =function(e){
+//			var oEvent = event || window.event;
+			// event||window.event兼容IE
+			var x = e.clientX;
+			var y = e.clientY;
+			var minX = x - mask.offsetWidth/2;
+			var minY = y - mask.offsetHeight/2;
+			if (x <=mask.offsetWidth/2) {
+				minX = 0;
+			}else if(x >= small.offsetWidth - mask.offsetWidth/2){
+				minX = small.offsetWidth - mask.offsetWidth;
+			}
+			if (y <= mask.offsetHeight/2) {
+				minY = 0;
+			}else if(y >= small.offsetHeight - mask.offsetHeight/2){
+				minY =small.offsetHeight -mask.offsetHeight;
+			}
+			
+			// 蒙版在small里面的位置
+			mask.style.left = minX +'px';
+			mask.style.top = minY +'px';
+			var bigImg = document.querySelector('.big img');
+			var ratioX = minX/(small.offsetWidth - mask.offsetWidth);
+			var ratioY = minY/(small.offsetHeight - mask.offsetHeight);
+			
+			bigImg.style.left = -ratioX *(bigImg.offsetWidth-big.offsetWidth) +'px';//减去大图像外边框的原因：因为这部分不用移动就在
+			bigImg.style.top = -ratioY*(bigImg.offsetHeight-big.offsetHeight)+'px';
+		}
+//	}
+	
+</script>
+</html>

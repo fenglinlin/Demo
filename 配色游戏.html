@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.body{
+				width: 500px;height: 600px;
+				border: 1px solid grey;
+				margin: 0 auto;
+				position: relative;
+			}
+			.head{
+				width: 450px;
+				padding-left: 50px;
+				text-align: left;
+				font-size: 25px;
+			}
+			span:first-child{
+				margin-left: 20px;
+			}
+			.change {
+				width: 150px;
+				height: 150px;
+				font-size: 150px;
+				margin: 100px auto;				
+			}
+			.select {
+				width: 100px;
+				height: 100px;
+				margin-bottom: 0;
+				font-size: 80px;
+				float: left;
+				line-height: 80px;
+			}
+			.restart{
+				font-size:40px;
+				width: 150px;
+				height: 60px;
+				outline: none;
+				/*border: 1px solid grey;*/
+				background: yellowgreen;
+				position: absolute;
+				left: 180px;top: 380px;
+				line-height: 60px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="body">
+			<p class="head">剩余时间：<span class="rest">20.0</span>&nbsp;&nbsp;S
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答对数：<span class="count"></span></p>
+			<button class="restart">restart!</button>
+			
+			<p class="change">红</p>
+			<p class="select">红</p>
+			<p class="select">黄</p>
+			<p class="select">绿</p>
+			<p class="select">黑</p>
+			<p class="select">蓝</p>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var change = document.querySelector(".change");
+		var selects = document.querySelectorAll(".select");
+		var count = document.querySelector(".count");
+		var rest = document.querySelector(".rest");
+		var restart = document.querySelector(".restart");
+		var q = 0;
+		var textArr = ["红","黄","蓝","黑","绿"];
+		var colorArr = ["red","yellow","blue","black","green"];
+		var isFirst = true;//判断是否是第一次点击
+		var time = 5;
+		var timer;
+		var randText,randColor;
+		var randTextArr=[],randColorArr=[];
+		setTextColor();
+		function setTextColor(){
+			count.innerText = q;
+			randText = getRand(0,5);
+			change.innerText = textArr[randText];
+			randColor = getRand(0,5);
+			change.style.color = colorArr[randColor];
+			//为了给5个p标签随机一个汉字，且不相同
+			//所以我们得到一个值为0-4长度为5的随机不相等的数组
+			//然后以这些数作为下标去textArr里面取汉字
+			//然后插入到p标签里面去
+			randTextArr = getRandArr(0,5,5);
+			randColorArr = getRandArr(0,5,5);
+			//console.log(randTextArr,randColorArr);
+			for(var i=0;i<selects.length;i++){
+				selects[i].innerText = textArr[randTextArr[i]];
+				selects[i].style.color = colorArr[randColorArr[i]];
+			}
+		}
+		for(var i=0;i<selects.length;i++){
+			selects[i].onclick = function(){
+				if(isFirst){
+					//进入之前是第一次，进入之后就不再是啦
+					isFirst = false;
+					timer = setInterval(function(){
+						time-=0.1;
+						time = time.toFixed(2);
+						//toFixed(num)
+						//Number的方法
+						//由数字来调用，接收一个数字，保留num位小树
+						//产生一个新的数字，不会返回给原数字
+						rest.innerText = time;
+						console.log(time)
+						if(time==0){
+							console.log("game over");
+							rest.innerText = 0;
+							clearInterval(timer);
+						}
+					},100)
+				}
+				//只有在时间不为0时，游戏才是在运行的状态
+				if(time!=0){
+					//点击的p标签里的汉字
+					var t = this.innerText;
+					//randColor数字
+					//colorArr[randColor];下标对应的颜色
+					//textArr[randColor]颜色对应的汉字
+					console.log(t,textArr[randColor])
+					if(t==textArr[randColor]){
+						q++;
+					}else{
+						q--;
+					}
+					setTextColor();
+				}
+					
+			}
+		}
+		
+		restart.onclick = function(){
+			// 清除可能存在的定时器
+			clearInterval(timer);
+			q = 0;
+			time = 20;
+			rest.innerText = time;
+			isFirst = true;
+			setTextColor();
+		}
+		
+		
+		function getRand(min,max){
+			return Math.floor(Math.random()*(max-min))+min;
+		}
+		
+		function getRandArr(min,max,len){
+			var arr = [];
+			if(len>max-min){
+				len = max-min;
+			}
+			while(arr.length<len){
+				var temp = true ;
+				var rd = Math.floor(Math.random()*(max-min)+min);
+				for(var i=0;i<arr.length;i++){
+					if(arr[i]==rd){
+						temp = false;
+						break;
+					}
+				}
+				if(temp){
+					arr.push(rd);
+				}
+			}
+			return arr;
+		}
+	</script>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		*{margin: 0;padding: 0;}
+		ul{overflow: hidden;}
+		li{
+			list-style: none;
+			float: left;
+			width: 50px;
+			height: 50px;
+			text-align: center;
+			line-height: 50px;
+			font-size: 20px;
+			margin: 10px;
+			border: 1px #ccc solid;
+		}
+		button{
+			width: 100px;height: 50px;font-size: 32px;
+		}
+		</style>
+	</head>
+	<body>
+		<button>开始</button>
+		<button>停止</button>
+		<ul>
+			<li>1</li>
+			<li>1</li>
+			<li>1</li>
+			<li>1</li>
+			<li>1</li>
+			<li>1</li>
+			<li>1</li>
+		</ul>
+	</body>
+	<script>
+		var btn = document.querySelector("button"),
+			stop = document.querySelectorAll("button")[1];
+			lis = document.querySelectorAll("li");
+		var timer0,timer1,timer2,timer3,timer4,timer5,timer6;
+		var arrRand = [];
+		btn.onclick = function(){
+//			for(var i=0;i<lis.length;i++){
+//				lis[i].index = i;
+//				lis[i].timer = window.setInterval(function(){
+//					//定时器里的this指向window
+//					var rd = flRand(1,34);
+//					
+//				},50)
+//			}
+			
+			timer0 = setInterval(function(){
+				//var rd = flRand(1,34);
+				//lis[0].innerText = rd;
+				setText(0);
+			},50)
+			
+			timer1 = setInterval(function(){
+				setText(1);
+			},50)
+			timer2 = setInterval(function(){
+				setText(2);
+			},50)
+			timer3 = setInterval(function(){
+				setText(3);
+			},50)
+			timer4 = setInterval(function(){
+				setText(4);
+			},50)
+			timer5 = setInterval(function(){
+				setText(5);
+			},50)
+			timer6 = setInterval(function(){
+				setText(6);
+			},50)
+		}
+//		var timer7=setTimeout(function(){
+//			clearInterval(timer0)
+//			clearInterval(timer1)
+//			clearInterval(timer2)
+//			clearInterval(timer3)
+//			clearInterval(timer4)
+//			clearInterval(timer5)
+//			clearInterval(timer6)
+//			
+//		},2000)
+		stop.onclick = function(){
+			var rd;
+			//第七个li的值固定下来
+			setTimeout(function(){
+				clearInterval(timer6);
+//				//rd = flRand(1,34);
+//				getDiff();
+//				console.log(rd);
+//				arrRand.unshift(rd);
+//				lis[6].innerText = rd;
+				stopChange(6);
+				
+			},50)
+			//第6个li的值固定下来
+			setTimeout(function(){
+				clearInterval(timer5);
+//				getDiff();
+//				arrRand.unshift(rd);
+//				lis[5].innerText = rd;
+//				//console.log(rd);
+				stopChange(5);
+			},1050)
+			setTimeout(function(){
+				clearInterval(timer4);
+				stopChange(4);
+			},2050)
+			setTimeout(function(){
+				clearInterval(timer3);
+				stopChange(3);
+			},3050)
+			setTimeout(function(){
+				clearInterval(timer2);
+				stopChange(2);
+			},4050)
+			setTimeout(function(){
+				clearInterval(timer1);
+				stopChange(1);
+			},5050)
+			setTimeout(function(){
+				clearInterval(timer0);
+				stopChange(0);
+			},6050)
+			
+			function stopChange(index){
+				getDiff();
+				arrRand.unshift(rd);
+				lis[index].innerText = rd;
+			}
+			
+			function getDiff(){
+				rd = flRand(1,34);
+				for(var i=0;i<arrRand.length;i++){
+					if(rd==arrRand[i]){
+						//出现相等的情况，即需要把函数重新运行一遍
+						getDiff();
+					}
+				}
+				//console.log(rd)
+			}
+			
+		}
+		
+		
+		
+		function setText(index){
+			var rd = flRand(1,34);
+			lis[index].innerText = rd;
+		}
+		
+		
+		
+		
+		function flRand(min,max){
+			return Math.floor(Math.random()*(max-min))+min;
+		}
+		
+	</script>
+</html>

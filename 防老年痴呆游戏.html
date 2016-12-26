@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+		*{
+			margin: 0;padding: 0;
+		}
+			.wrap{
+				width: 610px;height: 600px;
+				border: 5px solid orangered;
+				margin: 20px 0 0 30px;
+				position: relative;
+			}
+			.bounce{
+				width: 20px;height: 20px;
+				background-color: green;
+				position: absolute;
+			}
+			.board{
+				width: 100px;height: 15px;
+				background-color: deeppink;
+				position: absolute;
+				bottom: 0;
+			}
+			li{
+				list-style: none;
+				width: 50px;
+				height: 15px;
+				background-color: grey;
+				position: absolute;
+			}
+			button{
+				width: 150px;height: 25px;
+				margin: 50px 0 0 30px;
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>点击以下模式后自动开始游戏!</h1>
+		<button class="easy">智障模式</button>
+		<button class="normal">正常模式</button>
+		<button class="hard">失心疯模式</button>
+		<div class="wrap">
+			<div class="bounce"></div>
+			<div class="board"></div>
+		</div>
+		
+	</body>
+	<script type="text/javascript">
+		var wrap = document.querySelector(".wrap");
+		var ban = document.querySelector(".board");
+		var qq = document.querySelector(".bounce");
+		var ele = document.getElementsByTagName("li");
+		var btns = document.querySelectorAll("button");
+	//放置弹球	
+		qq.style.left = 0
+		qq.style.top = 130 +"px"
+	//放置砖块
+		for(var i=0;i<=59;i++){
+			var newele = document.createElement("li");
+			var L = i%10;
+			var T = Math.floor(i/10);
+			newele.style.left = L*60 + "px";
+			newele.style.top = T*20 + "px";
+			//newele.innerText = i
+			wrap.appendChild(newele.cloneNode(true));
+		}
+		
+	//弹板设定
+		document.addEventListener("mousemove",function(e){
+			var mouseX = e.clientX;
+			var yyy = mouseX - ban.offsetWidth/2 - wrap.offsetLeft
+			if(yyy<0){
+				yyy=0;
+			}else if(yyy>=510){
+				yyy=510;
+			}
+			ban.style.left = yyy + "px";
+		},false)
+		var a;
+		
+		for(var k=0;k<3;k++){
+			(function(w){
+				btns[w].onclick = function(){
+				a = w*3+1;
+				console.log(a)
+				sport()
+			}
+			})(k)
+		}
+	
+	
+		
+		
+	function sport(){
+		
+	//子弹的反弹运动
+		var hor = 1,ver = 2;
+		clearInterval(timer1);
+		
+		var timer1 = setInterval(function(){
+			qq.style.left = parseInt(qq.style.left) + a*hor + "px";
+			qq.style.top  = parseInt(qq.style.top)  + a*ver + "px";
+		//碰撞检测
+			if(qq.offsetTop<=0||qq.offsetLeft-ban.offsetLeft>-20&&qq.offsetLeft-ban.offsetLeft<120&&qq.offsetTop>=565&&qq.offsetTop<580){
+				ver=-1*ver;
+			}
+			if(qq.offsetLeft<=0||qq.offsetLeft>=590){
+				hor=-1*hor;
+			}
+			if(qq.offsetTop>580){
+				alert("白痴！game over!!!")
+				clearInterval(timer1);
+			}
+			for(var i=0;i<ele.length;i++){
+				if(qq.offsetTop<=ele[i].offsetTop+15&&qq.offsetTop>ele[i].offsetTop&&qq.offsetLeft-ele[i].offsetLeft>-20&&qq.offsetLeft-ele[i].offsetLeft<50){
+				ele[i].remove();
+				ver=-1*ver;
+				if(ele.length==0){
+					alert("恭喜！您没有老年痴呆!")
+					clearInterval(timer1);
+				}
+			}
+			}
+		},10)
+		
+	}
+	
+	
+	</script>
+</html>
